@@ -165,8 +165,8 @@ export default {
     //var filterParams = `page=${this.currentPage}&pageSize=${this.pageSize}&sort[0][field]=${this.sortColumn}&sort[0][dir]=${this.sortDirection}${filterQuery}`;
     var filterParams = `page=${currentPage}&pageSize=${pageSize}&sort[0][field]=userName&sort[0][dir]=asc`;
 
-			  fetch(`http://localhost:5010/api/event?&${filterParams}`)
-//			  fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event?${filterParams}`)
+//			  fetch(`http://localhost:5010/api/event?&${filterParams}`)
+			  fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event?${filterParams}`)
 				.then(response => {
           this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
         console.log('fetch TotalRows', this.TotalRows);
