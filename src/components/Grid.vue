@@ -118,6 +118,9 @@ export default {
         sortBy: function(key) {
         this.sortKey = key;
         this.sortOrders[key] = this.sortOrders[key] * -1;
+        //console.log('sortkey', this.sortKey);
+        //console.log('sortOrder', this.sortOrders[key]);
+        bus.$emit('onSorting',this.sortKey, this.sortOrders[key]);
         },
       showPop(itm) {
         bus.$emit('onSelectedItem',itm);

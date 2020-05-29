@@ -11,6 +11,7 @@
         :formatcolumns="handleColumn"
         @onChangePage="onChangePage($event)"
         @onSelectedItem="onSelectedItem($event)"
+        @onSelectedItem="onSelectedItem($event)"
       >
       
          <div slot="header">
@@ -100,6 +101,8 @@ export default {
           TotalRows:0,
           currentPage:1,
           currentPageSize:10,
+          sortKey:"userName", 
+          sortDirection:"asc",
           selectedItem:{},
           handleColumn:{
                     'topicf': function(item) {
@@ -120,15 +123,22 @@ export default {
       bus.$on('onChangePage',(page) => {
         console.log('onchangepage', page);
         this.currentPage=page;
-  			this.search(this.currentPage,this.currentPageSize);
+  			this.search(this.currentPage,this.currentPageSize,this.sortKey, this.sortDirection);
       });
       bus.$on('onSelectedItem',(itm) => {
         this.selectedItem=itm;
       });
+      bus.$on('onSorting',(sortKey, sortDirection) => {
+        console.log('onSorting sortkey', sortKey);
+        console.log('sortOrder', sortDirection);
+        this.sortKey=sortKey;
+        this.sortDirection=sortDirection==1?"asc":"desc";
+  			this.search(this.currentPage,this.currentPageSize,this.sortKey, this.sortDirection);
+      });
 
-    
 
-			this.search(this.currentPage,this.currentPageSize);
+
+			this.search(this.currentPage,this.currentPageSize,this.sortKey, this.sortDirection);
     },
     computed: {
       selectedTopicTitle() {
@@ -152,7 +162,7 @@ export default {
    
     },
 		methods: {
-			search: function (currentPage, pageSize) {
+			search: function (currentPage, pageSize, sortKey, sortDirection) {
 //requests = "?page=1&pageSize=20&sort[0][field]=Date&sort[0][dir]=asc&filter[logic]=and&filter[filters][0][field]=Date&filter[filters][0][operator]=gte&filter[filters][0][value]=2019-06-30";
 //			  fetch(`http://n50.schuebelsoftware.com/api/users`)
 
@@ -163,7 +173,7 @@ export default {
 
     //  var filterQuery=`&filter[logic]=and&filter[filters][0][field]=${this.filterField}&filter[filters][0][operator]=${filterOp}&filter[filters][0][value]=${this.filterValue}`;
     //var filterParams = `page=${this.currentPage}&pageSize=${this.pageSize}&sort[0][field]=${this.sortColumn}&sort[0][dir]=${this.sortDirection}${filterQuery}`;
-    var filterParams = `page=${currentPage}&pageSize=${pageSize}&sort[0][field]=userName&sort[0][dir]=asc`;
+    var filterParams = `page=${currentPage}&pageSize=${pageSize}&sort[0][field]=${sortKey}&sort[0][dir]=${sortDirection}`;
 
 //			  fetch(`http://localhost:5010/api/event?&${filterParams}`)
 			  fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event?${filterParams}`)
