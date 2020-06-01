@@ -129,6 +129,7 @@ export default {
                 return response.json()})
             .then(json => {
                 console.log('group', json);
+                this.SelectedEmailIDList  = [];
                 json.forEach(item => {
                     this.SelectedEmailIDList.push(item.personId);
                 });
@@ -189,11 +190,9 @@ export default {
             this.UnSelectedEmailList  = [];
             this.SelectedEmailList  = [];
             if (this.SelectedEmailIDList==null || (this.SelectedEmailIDList!=null && this.SelectedEmailIDList.length==0)) {
-                console.log("!!!!!!!! UpdateLists thinks NULL or Empty this.SelectedEmailIDList=");
                 this.UnSelectedEmailList=this.PeopleList;
             }
             else {
-                console.log("!!!!!!!! UpdateLists thinks NOT Empty this.SelectedEmailIDList=");
                 let currList = this.SelectedEmailIDList;
                 this.SelectedEmailList = _.reduce(this.PeopleList, function(memo, val, idx) {
                     //console.log("SEL val.id", val._id);

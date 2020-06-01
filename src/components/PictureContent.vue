@@ -86,7 +86,7 @@ export default {
       initLoad(){
         let self = this
         var data = localStorage.getItem("SSSPics");
-        console.log("initload data", data);
+        console.log("./initload data", data);
        if (data==null) {
           fetch('Inetpub.json')
           .then(response => response.text()) //.json())
