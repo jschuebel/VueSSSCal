@@ -20,29 +20,26 @@
 </ul>
 
 <div class="days">
-        <div  v-for="dy in calDays" class='daycont'>
+        <div  v-for="dy in calDays"  v-bind:class="{ daycont: true, active: dy.pageNo==(new Date().getDate())}">
             <div class='daypg'>{{dy.pageNo}}</div>
             <div class='daylbl' v-for="dyl in dy.events" @click="ShowPop(dyl.description)">{{dyl.label}}</div>
         </div>
 </div>
 
- <div style="display: block;">
-
-
+    <h2>{{sectionTitle}}</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
       <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
       <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
     </ul>
-    <h2>{{sectionTitle}}</h2>
     <ul>
       <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
       <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
-    </div>
+
  </div>
 </template>
 
@@ -91,7 +88,8 @@ export default {
             currDateYear:'',
             currDate : new Date(`${(new Date()).getMonth()+1}-01-${(new Date()).getFullYear()}`),
             startDate : new Date(),
-            endDate : new Date()
+            endDate : new Date(),
+            isActive:true
         }
     },
     created(){
@@ -259,9 +257,12 @@ export default {
 .days {
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
-}
+    width: 100%;
+    background:white;
+    height: 705px;
+   }
 
-    .days .daycont {
+    .daycont {
         background: #eee;
         width: 13.6%;
         height:115px;
@@ -271,15 +272,21 @@ export default {
         float: left;
         overflow:auto;
     }
-        .daypg {
-            padding: 0px 0px 0px 0px;
-            margin: 0px 0px 0px 0px;
-            width: 100%;
-            display: inline-block;
-            text-align: right;
-            font-size: 12px;
-            color: #777;
+
+    /* Highlight the "current" day */
+    .active.daycont{
+            padding: 5px;
+            background:#1abc9c !important;
         }
+.daypg {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+    display: inline-block;
+    text-align: right;
+    font-size: 12px;
+    color: #777;
+    }
 
 .daylbl {
     background: DarkCyan;
@@ -293,11 +300,5 @@ export default {
     color: white;
 }
 
-    /* Highlight the "current" day */
-    .daylbl .active {
-        padding: 5px;
-        background: #1abc9c;
-        color: white !important
-    }
 
 </style>
