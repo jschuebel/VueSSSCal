@@ -76,9 +76,13 @@ export default {
                 this.PeopleList = json;
             });
 
+        let startDate = new Date(`${(new Date()).getMonth()+1}-01-${(new Date()).getFullYear()}`);
+        let endDate = new Date(`12-31-${(new Date()).getFullYear()}`)
+        console.log(`startDate = ${startDate}`);
+        console.log(`endDate = ${endDate}`);
 
-
-    	fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event/currentyearly`)
+        //currentyearly
+    	fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event/calendarsearch?startDate=${startDate.ToShortDateString()}&endDate=${endDate.ToShortDateString()}`)
 		.then(response => {
             //this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
             //console.log('fetch TotalRows', this.TotalRows);
