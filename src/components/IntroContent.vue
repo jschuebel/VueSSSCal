@@ -103,12 +103,15 @@ export default {
                 for(var i=0;i<(numWeeks * 7);i++) {
                     let cDay=cDate.getDate();
                     let cMonth=cDate.getMonth();
+                    let cYear=cDate.getYear();
                     var dayptr = {pageNo: cDay, events:[]};
                     this.calEvents.forEach(item => {
                         let iDate = new Date(item.date);
                         let iDay=iDate.getDate();   
                         let iMonth=iDate.getMonth();
-                        if (iMonth===cMonth && iDay===cDay)
+                        let iYear=iDate.getYear();
+                        if ((item.topicId===0 && iMonth===cMonth && iDay===cDay && iYear===cYear) ||
+                                (item.topicId===1 && iMonth===cMonth && iDay===cDay))
                              dayptr.events.push({ label : item.topic, description : item.description });
                     });
                     this.calDays.push(dayptr);
