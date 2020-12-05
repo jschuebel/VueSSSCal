@@ -88,7 +88,7 @@ export default {
         var data = localStorage.getItem("SSSPics");
         console.log("./initload data", data);
        if (data==null) {
-          fetch('Inetpub.json')
+          fetch('Inetpub.txt')
           .then(response => response.text()) //.json())
           .then(data => {
            // localStorage.setItem("SSSPics", data);
@@ -233,7 +233,7 @@ export default {
           },
           ChangeMovie(event, path){
             console.log("ChangeMovie path", path);
-            let hldpath = path.replace("f:/inetpub/", "http://www.schuebelsoftware.com/"); 
+            let hldpath = path.replace(/.:\/inetpub\//, "http://www.schuebelsoftware.com/"); //"http://localhost/");
             //f:/inetpub/family/jt/jmallwalkwave.mp4
             //let hldpath  ="http://www.schuebelsoftware.com/family/jt/jmallwalkwave.mp4";
             console.log("ChangeMovie updated hldpath", hldpath);

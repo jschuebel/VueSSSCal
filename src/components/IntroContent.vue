@@ -186,7 +186,7 @@ export default {
             //console.log('endDate.ToShortDateString()', this.endDate.ToShortDateString());
 //http://www.schuebelsoftware.com/SSSCalCoreApi/api/event/calendarsearch?startDate=5-31-2020&endDate=7-4-2020
 //		  fetch(`http://localhost:5010/api/event?&${filterParams}`)
-		  fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event/calendarsearch?startDate=${this.startDate.ToShortDateString()}&endDate=${this.endDate.ToShortDateString()}`)
+		  fetch(`http://api.schuebelsoftware.com/api/event/calendarsearch?startDate=${this.startDate.ToShortDateString()}&endDate=${this.endDate.ToShortDateString()}`)
 				.then(response => {
                     this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
                     //console.log('fetch TotalRows', this.TotalRows);

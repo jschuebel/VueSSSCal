@@ -66,7 +66,7 @@ export default {
         }
     },
     created(){
-            fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/person`)
+            fetch(`http://api.schuebelsoftware.com/api/person`)
             .then(response => {
                 //this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
                 //console.log('fetch TotalRows', this.TotalRows);
@@ -82,7 +82,7 @@ export default {
         console.log(`endDate = ${endDate}`);
 
         //currentyearly
-    	fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event/calendarsearch?startDate=${startDate.ToShortDateString()}&endDate=${endDate.ToShortDateString()}`)
+    	fetch(`http://api.schuebelsoftware.com/api/event/calendarsearch?startDate=${startDate.ToShortDateString()}&endDate=${endDate.ToShortDateString()}`)
 		.then(response => {
             //this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
             //console.log('fetch TotalRows', this.TotalRows);
@@ -126,7 +126,7 @@ export default {
             //console.log("onchange evnt=",evnt.target.value);
             console.log("onchange SelectedEvent=",this.selectedEvent);
 
-            fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/group/${this.selectedEvent.id}`)
+            fetch(`http://api.schuebelsoftware.com/api/group/${this.selectedEvent.id}`)
             .then(response => {
                 //this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
                 //console.log('fetch TotalRows', this.TotalRows);

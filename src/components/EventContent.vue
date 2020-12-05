@@ -176,7 +176,7 @@ export default {
     var filterParams = `page=${currentPage}&pageSize=${pageSize}&sort[0][field]=${sortKey}&sort[0][dir]=${sortDirection}`;
 
 //			  fetch(`http://localhost:5010/api/event?&${filterParams}`)
-			  fetch(`http://www.schuebelsoftware.com/SSSCalCoreApi/api/event?${filterParams}`)
+			  fetch(`http://api.schuebelsoftware.com/api/event?${filterParams}`)
 				.then(response => {
           this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
         console.log('fetch TotalRows', this.TotalRows);
