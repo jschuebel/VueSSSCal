@@ -12,15 +12,14 @@
         @onChangePage="onChangePage($event)"
         @onSelectedItem="onSelectedItem($event)"
       >
-      
-         <div slot="header">
+         <div slot="modalheader">
             <h4 class="modal-title">User Edit</h4>
           <button class="close" aria-label="Close" @click="close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
 
-        <div slot="body">
+        <div slot="modalbody">
             <form id="edit-book-form" action="/SSSCal/Person/HandlePopForm" class="container-fluid"> 
                 <div class="row"> 
                         <div class="col-xs-6 col-sm-4">
@@ -61,7 +60,7 @@
             </form>
         </div>
 
-        <div slot="footer">
+        <div slot="modalfooter">
             <button type="button" className="btn btn-outline-dark" @click="save" >Save</button>
             <button type="button" className="btn btn-outline-dark" @click="close" >Close</button>
         </div>
@@ -73,7 +72,7 @@
 </template>
 
 <script>
-import Grid from './Grid.vue'
+import GridOrig from './GridOrig.vue'
 import bus from '../main'
 
 //Vue.forceUpdate();
@@ -81,7 +80,7 @@ import bus from '../main'
 
 
 export default {
-  components: {'grid': Grid},
+  components: {'grid': GridOrig},
     data(){
 
         return {
@@ -199,4 +198,5 @@ display: inline-flex;
 .close {
   float: right;
 }
+
 </style>

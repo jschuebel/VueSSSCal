@@ -1,11 +1,23 @@
  <template>
  <div>
-      <table class="table table-responsive table-striped table-hover table-condensed">
+      <table>
         <thead>
-             <slot name="gridheader"></slot>
+          <tr>
+            <th v-for="key in columns"
+              @click="sortBy(key)"
+              :class="{ active: sortKey == key }">
+              {{ key | capitalize }}
+              <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+              </span>
+            </th>
+          </tr>
         </thead>
         <tbody>
-          <slot name="gridbody"></slot>
+          <tr v-for="entry in griddata"  @click="showPop(entry)">
+            <td v-for="key in columns">
+              {{formatColumn(key, entry[key])}}
+            </td>
+          </tr>
         </tbody>
         <tfoot>
         <tr><td colSpan="4">
@@ -38,16 +50,25 @@ export default {
     components: {pagination: Pagination, modal:modal},
 
      props: {
+        title: String,
+        griddata: Array,
         totalrows:Number,
         page:Number,
         pagesize:Number,
+        columns: Array,
         filterKey: String,
         formatcolumns : {},
     },
 
     data(){
+          var sortOrders = {};
+          this.columns.forEach(function(key) {
+            sortOrders[key] = 1;
+          });
           return {
             sectionTitle:'Footer',
+            sortKey: "",
+            sortOrders: sortOrders,
             showModal: false
           };
     },
@@ -102,7 +123,6 @@ export default {
         bus.$emit('onSorting',this.sortKey, this.sortOrders[key]);
         },
       showPop(itm) {
-        console.log('showpop fired GRID');
         bus.$emit('onSelectedItem',itm);
         this.showModal=true;
       }

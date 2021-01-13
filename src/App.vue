@@ -30,6 +30,22 @@ export default {
   
 }
 
+@media (max-width: 767.98px) {
+  .main .top-row:not(.auth) {
+      display: none;
+  }
+
+  .smallSCR {
+      display: none;
+  }
+}
+
+
+@media only screen and (max-width: 992px) {
+  .medSCR {
+      display: none;
+  }
+}
 </style>
 
 <style scoped>

@@ -2,7 +2,6 @@
  <div>
     <h2>{{sectionTitle}}</h2>
      <grid ref="pgrid"
-        :griddata="gridData"
         :totalrows="TotalRows"
         :page="currentPage"
         :pagesize="currentPageSize"
@@ -11,8 +10,20 @@
         :formatcolumns="handleColumn"
         @onChangePage="onChangePage($event)"
         @onSelectedItem="onSelectedItem($event)"
-        @onSelectedItem="onSelectedItem($event)"
       >
+          <tr slot="gridheader">
+              <th @click="sortBy('name')" :class="{ active: sortKey == 'name'}">Name<font-awesome-icon :icon="sortOrders['name'].icon" /></th>
+              <th @click="sortBy('dateOfBirth')" :class="[{ active: sortKey == 'dateOfBirth'}, 'smallSCR', 'medSCR:true']">Date<font-awesome-icon :icon="sortOrders['dateOfBirth'].icon" /></th>
+              <th @click="sortBy('homePhone')" :class="{ active: sortKey == 'homePhone'}">Home Phone<font-awesome-icon :icon="sortOrders['homePhone'].icon" /></th>
+              <th @click="sortBy('mobile')" :class="[{ active: sortKey == 'mobile'}, 'smallSCR']">Mobile<font-awesome-icon :icon="sortOrders['mobile'].icon" /></th>
+          </tr>
+
+          <tr v-for="entry in gridData"  slot="gridbody"   @click="showPop(entry)">
+            <td>{{entry.name}}</td>
+            <td :class="['smallSCR', 'medSCR:true']">{{handleColumn.dateOfBirth(entry.dateOfBirth)}}</td>
+            <td>{{entry.homePhone}}</td>
+            <td :class="'smallSCR'">{{handleColumn.mobile(entry.mobile)}}</td>
+          </tr>
       
          <div slot="modalheader">
             <h4 class="modal-title">User Edit</h4>
@@ -28,7 +39,7 @@
                             <label class="label2">Name</label>
                         </div>
                         <div class="col-xs-6 col-lg-8">
-                                <input class="form-control" type="text" name="Name" id="Name" :placeholder="selectedItem.userName" /> 
+                                <input class="form-control" type="text" name="Name" id="Name" :placeholder="selectedItem.name" /> 
                         </div>
                     <input type="hidden" id="id" name="id" /> 
                     <input type="hidden" id="Address_ID" name="Address_ID" /> 
@@ -36,34 +47,26 @@
 
                 <div class="row"> 
                     <div class="col-xs-6 col-sm-4" >
-                            <label  class="label2">TopicF</label>
+                            <label  class="label2">Home_Phone</label>
                     </div>
                     <div class="col-xs-6 col-lg-8" >
-                            <input class="form-control" type="text" name="Home_Phone" id="Home_Phone" :placeholder="selectedTopicTitle"  /> 
+                            <input class="form-control" type="text" name="Home_Phone" id="Home_Phone" :placeholder="selectedItem.homePhone"  /> 
                     </div>
                 </div>  
                 <div class="row"> 
                     <div class="col-xs-6 col-sm-4" >
-                            <label  class="label2">Topic</label>
+                            <label  class="label2">Email Adress</label>
                     </div>
                     <div class="col-xs-6 col-lg-8" >
-                            <input class="form-control" type="text" name="E_Mail"  :placeholder="selectedItem.topic" /> 
+                            <input class="form-control" type="text" name="E_Mail"  :placeholder="selectedItem.eMail" /> 
                     </div>
                 </div>  
                 <div class="row"> 
                     <div class="col-xs-6 col-sm-4" >
-                            <label  class="label2">Date</label>
+                            <label  class="label2">Date of Birth</label>
                     </div>
                     <div class="col-xs-6 col-lg-8" >
-                            <input class="form-control" type="date" :value="selectedDate" /> 
-                    </div>
-                </div>  
-                <div class="row"> 
-                    <div class="col-xs-6 col-sm-4" >
-                            <label  class="label2">Description</label>
-                    </div>
-                    <div class="col-xs-6 col-lg-8" >
-                            <input class="form-control" type="text" :value="selectedItem.description" /> 
+                            <input class="form-control" type="date" :value="selectedDOB" /> 
                     </div>
                 </div>  
 
@@ -79,37 +82,44 @@
       </grid>
 
  </div>
+
 </template>
 
 <script>
-import GridOrig from './GridOrig.vue'
+import Pagination from './Pagination.vue'
 import bus from '../main'
-
+import Grid from './Grid.vue'
 //Vue.forceUpdate();
 
 
 
 export default {
-  components: {'grid': GridOrig},
+  components: {pagination: Pagination, 'grid': Grid},
     data(){
+          var sortOrders = {};
+            sortOrders["name"] = {direction:1, icon:['fas', 'sort-up']};
+          ["homePhone", "mobile","dateOfBirth"].forEach(function(key) {
+            sortOrders[key] = {direction:1, icon:['fas', 'sort']};
+          });
 
         return {
-            sectionTitle:'Event',
+            sectionTitle:'Person',
           searchQuery: "",
-          gridColumns: ["topicf", "topic", "description","date","userName"],
           gridData: [],
+          gridColumns: ["name", "homePhone", "mobile","dateOfBirth"],
+          sortOrders: sortOrders,
           TotalRows:0,
           currentPage:1,
           currentPageSize:10,
-          sortKey:"userName", 
+          sortKey:"name", 
           sortDirection:"asc",
           selectedItem:{},
           handleColumn:{
-                    'topicf': function(item) {
-                          return item==null?'N/A':item.topicTitle;
+                    'mobile': function(item) {
+                          return item==null?'N/A':item;
                       },
-                    'date': function(item){
-                          if (item==null || (item!=null && item=='0001-01-01T00:00:00')) return 'N/A';
+                    'dateOfBirth': function(item){
+                          if (item=='0001-01-01T00:00:00') return 'N/A';
                           var pos = item.indexOf('T');
                           if (pos>=0) {
                             return item.substr(0,pos);
@@ -128,35 +138,24 @@ export default {
       bus.$on('onSelectedItem',(itm) => {
         this.selectedItem=itm;
       });
-      bus.$on('onSorting',(sortKey, sortDirection) => {
-        console.log('onSorting sortkey', sortKey);
-        console.log('sortOrder', sortDirection);
-        this.sortKey=sortKey;
-        this.sortDirection=sortDirection==1?"asc":"desc";
-  			this.search(this.currentPage,this.currentPageSize,this.sortKey, this.sortDirection);
-      });
-
-
+    
 
 			this.search(this.currentPage,this.currentPageSize,this.sortKey, this.sortDirection);
     },
     computed: {
-      selectedTopicTitle() {
-            if (this.selectedItem!=null && this.selectedItem.topicf!=null && this.selectedItem.topicf.topicTitle!=null)
-              return this.selectedItem.topicf.topicTitle;
-            else return 'N/A';
-      },
-      selectedDate: {
+  selectedDOB: {
           get(){
-            var dateOfBirth = new Date(this.selectedItem.date);
-            console.log('seldob dateOfBirth string', this.selectedItem.date);
-            console.log('seldob dateOfBirth date', dateOfBirth);
+            var dateOfBirth = new Date(this.selectedItem.dateOfBirth);
             var mnt=`${dateOfBirth.getMonth()+1}`;
             if (mnt.length==1) mnt='0'+mnt;
             var dy=`${dateOfBirth.getDate()}`;
             if (dy.length==1) dy='0'+dy;
-            console.log('seldob', `${dateOfBirth.getFullYear()}-${mnt}-${dy}`);
+            console.log('seldob STUFF', `${dateOfBirth.getFullYear()}-${mnt}-${dy}`);
             return `${dateOfBirth.getFullYear()}-${mnt}-${dy}`;
+          },
+          set(newVal){
+            let [y, m, d] = newVal.split('-');
+            this.selectedItem.dateOfBirth = {y, m, d};
           }
         }
    
@@ -175,8 +174,8 @@ export default {
     //var filterParams = `page=${this.currentPage}&pageSize=${this.pageSize}&sort[0][field]=${this.sortColumn}&sort[0][dir]=${this.sortDirection}${filterQuery}`;
     var filterParams = `page=${currentPage}&pageSize=${pageSize}&sort[0][field]=${sortKey}&sort[0][dir]=${sortDirection}`;
 
-//			  fetch(`http://localhost:5010/api/event?&${filterParams}`)
-			  fetch(`http://api.schuebelsoftware.com/api/event?${filterParams}`)
+//			  fetch(`http://localhost:5010/api/person?&${filterParams}`)
+			  fetch(`http://api.schuebelsoftware.com/api/person?${filterParams}`)
 				.then(response => {
           this.TotalRows = parseInt(response.headers.get('Paging-TotalRecords'));
         console.log('fetch TotalRows', this.TotalRows);
@@ -193,7 +192,31 @@ export default {
       },
       close(){
             this.$refs.pgrid.showModal = false;
+      },
+      sortBy: function(key) {
+
+        if (this.sortKey!=key) {
+          this.sortOrders[this.sortKey].direction = 1;
+          this.sortOrders[this.sortKey].icon=['fas', 'sort'];
+        }
+
+        this.sortKey=key;
+        this.sortOrders[key].direction = this.sortOrders[key].direction * -1;
+        console.log('sortkey', this.sortKey);
+        console.log('sortOrders[key]', this.sortOrders[key].direction);
+        console.log('this.sortDirection', this.sortDirection);
+
+        this.sortDirection=this.sortOrders[key].direction===1?"asc":"desc";
+        this.sortOrders[key].icon=this.sortOrders[key].direction===1?['fas', 'sort-up']:['fas', 'sort-down'];
+        
+  			this.search(this.currentPage,this.currentPageSize,this.sortKey, this.sortDirection);
+        },
+       showPop(itm) {
+        console.log('showpop fired STUFF');
+        this.selectedItem=itm;
+        this.$refs.pgrid.showModal = true;
       }
+
       
     }
 }
@@ -211,4 +234,5 @@ display: inline-flex;
 .close {
   float: right;
 }
+
 </style>

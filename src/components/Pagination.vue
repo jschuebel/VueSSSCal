@@ -9,7 +9,7 @@
             </li>
 
             <li v-for="(cpage, index) in pager.pages" :key="cpage.id" v-bind:class="{'page-item':true, active:cpage===page}">
-                <a class="page-link"  @click="setPage(cpage)">{{cpage}}</a>
+                <a class="page-link smallSCR"  @click="setPage(cpage)">{{cpage}}</a>
             </li>
             <li class='page-item'>
                 <a class="page-link" @click="setPage(pager.currentPage + 1)">Next</a>

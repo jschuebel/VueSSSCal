@@ -1,7 +1,7 @@
  <template>
  <header>
     <div class="content-wrapper">
-        <p style='float:left'><img alt="Contact Us" style='height:110px' src="../assets/logo.png" /></p>
+        <p class="smallSCR" style='float:left'><img alt="Contact Us" style='height:110px' src="../assets/logo.png" /></p>
     </div>
     <div class="container"> 
           <div class="row">
@@ -84,6 +84,7 @@ header {
 
   height: 115px;
 }
+
 
 
 </style>
